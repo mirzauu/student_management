@@ -1,0 +1,44 @@
+{% extends 'result/base.html' %}
+{% block title %} Upload {%endblock%}
+
+{% block content %}
+	
+	<form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" id="submit">Save</button>
+        
+        <p id="drp_error" style="color: red; font-size:18px;"></p>
+        {% if messages %}
+            <ul class=messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+    </form>
+    
+    <script type="text/javascript">
+        var uploadField = document.getElementById("id_pdf_file");
+        var ud = document.getElementById("id_select_standard").length;
+        var drp_error = document.getElementById("drp_error");
+
+        uploadField.onchange = function() {
+            if(this.files[0].size > 2097152){
+               alert("File is too big! Please Upload file less than 2 MB");
+               this.value = "";
+            };
+        };
+        
+        if(ud==1){
+            document.getElementById("drp_error").innerHTML = "Please add standard first!";
+        }
+
+
+        function checkSel(obj) {
+        var ind = obj.selectedIndex;
+        if (ind == '') { alert('Please select the value.'); }
+        }
+    </script>  
+{% endblock %}
